@@ -4,10 +4,12 @@ package cloud.devyard.rbapi.mapper;
 import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.RegisterRequest;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Component
 public class AuthResponseMapper {
 
     public User registerRequestToUser(RegisterRequest request){
@@ -31,6 +33,8 @@ public class AuthResponseMapper {
             .profileImageUrl(user.getProfileImageUrl())
             .isEmailVerify(user.isEmailVerify())
             .subscriptionPlan(user.getSubscriptionPlan())
+            .createdAt(user.getCreatedAt())
+            .updatedAt(user.getUpdatedAt())
             .build();
     }
 
