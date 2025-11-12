@@ -54,4 +54,19 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errors, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex)
+    {
+        logger.warn("Resource not found: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value() , ex.getMessage());
+        return new  ResponseEntity<>(error,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AlreadyExistsException.class)
+    public ResponseEntity<ErrorResponse> handleAlreadyExistsException(AlreadyExistsException ex)
+    {
+        logger.warn("Duplicate resource: {}", ex.getMessage());
+        ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value() , ex.getMessage());
+        return new  ResponseEntity<>(error,HttpStatus.CONFLICT);
+    }
 }
