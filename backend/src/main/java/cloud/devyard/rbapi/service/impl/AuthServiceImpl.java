@@ -3,6 +3,7 @@ package cloud.devyard.rbapi.service.impl;
 import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.RegisterRequest;
+import cloud.devyard.rbapi.exception.AlreadyExistsException;
 import cloud.devyard.rbapi.mapper.AuthResponseMapper;
 import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.service.AuthService;
@@ -22,7 +23,7 @@ public class AuthServiceImpl implements AuthService {
         log.info("Inside AuthService: register() {} ",request);
 
         if (userRepository.existsByEmail(request.getEmail())){
-            throw  new RuntimeException("User already exists with this email");
+            throw  new AlreadyExistsException("User already exists with this email");
         }
 
         User newUser = authResponseMapper.registerRequestToUser(request);

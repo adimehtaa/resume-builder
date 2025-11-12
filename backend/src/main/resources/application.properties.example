@@ -1,1 +1,4 @@
 spring.application.name: resumebuilderapi
+
+#Mongodb configuration
+spring.data.mongodb.uri=mongodb+srv://<username>:<password>@<cluster-name>.mongodb.net/resume_db?retryWrites=true&w=majority
