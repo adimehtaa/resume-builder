@@ -6,4 +6,5 @@ import cloud.devyard.rbapi.dto.RegisterRequest;
 
 public interface AuthService {
     public AuthResponse register(RegisterRequest request);
+    public void verifyEmail(String token);
 }
