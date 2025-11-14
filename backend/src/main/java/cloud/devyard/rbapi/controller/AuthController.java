@@ -19,12 +19,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody RegisterRequest request){
+        log.info("Inside AuthController - register(): {}",request);
         AuthResponse response =  authService.register(request);
+        log.info("Response from service: {} ",response);
         return ResponseEntity.ok(response);
     }
 
     @GetMapping("/verify-email")
     public ResponseEntity<Void> verifyEmail(@RequestParam String token){
+        log.info("Inside AuthController - verifyEmail(): {}",token);
         authService.verifyEmail(token);
         return ResponseEntity.status(HttpStatus.OK).build();
     }

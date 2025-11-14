@@ -22,6 +22,7 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     public void sendHtmlEmail(String to, String subject, String content) throws MessagingException {
+        log.info("Inside EmailServiceImpl in sendHtmlEmail(): {},{},{}", to,subject ,content);
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message , true , "UTF-8");
         helper.setFrom(fromEmail);

@@ -2,8 +2,6 @@ package cloud.devyard.rbapi.exception;
 
 import jakarta.validation.ConstraintViolationException;
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -19,12 +17,11 @@ import java.util.Map;
 @Slf4j
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ErrorResponse> handleGeneralException(Exception ex)
     {
-        logger.error("Unexpected error occurred", ex);
+        log.error("Inside GlobalExceptionHandler - handleGeneralException()");
         ErrorResponse error  = new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value() , ex.getMessage());
         return new ResponseEntity<>(error , HttpStatus.INTERNAL_SERVER_ERROR);
     }
@@ -32,6 +29,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<Map<String , String>> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex)
     {
+        log.error("Inside GlobalExceptionHandler - handleMethodArgumentNotValidException()");
         Map<String , String > errors = new HashMap<>();
         BindingResult bResult = ex.getBindingResult();
         List<FieldError> errorList = bResult.getFieldErrors();
@@ -45,6 +43,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Map<String, String>> handleConstraintViolationException(ConstraintViolationException ex) {
+        log.error("Inside GlobalExceptionHandler - handleConstraintViolationException()");
         Map<String, String> errors = new HashMap<>();
         ex.getConstraintViolations().forEach(cv -> {
             String path = cv.getPropertyPath().toString();
@@ -57,7 +56,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ErrorResponse> handleNotFoundException(NotFoundException ex)
     {
-        logger.warn("Resource not found: {}", ex.getMessage());
+        log.error("Inside GlobalExceptionHandler - handleNotFoundException()");
         ErrorResponse error = new ErrorResponse(HttpStatus.NOT_FOUND.value() , ex.getMessage());
         return new  ResponseEntity<>(error,HttpStatus.NOT_FOUND);
     }
@@ -65,7 +64,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(AlreadyExistsException.class)
     public ResponseEntity<ErrorResponse> handleAlreadyExistsException(AlreadyExistsException ex)
     {
-        logger.warn("Duplicate resource: {}", ex.getMessage());
+        log.error("Inside GlobalExceptionHandler - handleAlreadyExistsException()");
         ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value() , ex.getMessage());
         return new  ResponseEntity<>(error,HttpStatus.CONFLICT);
     }

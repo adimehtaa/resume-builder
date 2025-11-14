@@ -46,6 +46,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void verifyEmail(String token) {
+        log.info("Inside authService verifyEmail(): {}",token);
         User user = userRepository.findByVerificationToken(token)
                 .orElseThrow(() -> new NotFoundException("Invaild or Expired verification token."));
 
@@ -60,6 +61,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     private void verificationEmail(User user) {
+        log.info("Inside authService: verificationEmail() : {}",user);
         try {
 
             String link = appBaseUrl+"/api/auth/verify-email?token="+user.getVerificationToken();
@@ -74,6 +76,7 @@ public class AuthServiceImpl implements AuthService {
             emailService.sendHtmlEmail(user.getEmail(),"Verify Your email",html);
         } catch (Exception e)
         {
+            log.error("Exception occured at verificationEmail(): {}",e.getMessage());
             throw new RuntimeException("Fail to Send Varification email: " + e);
         }
     }
