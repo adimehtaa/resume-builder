@@ -9,6 +9,8 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
+import org.springframework.web.multipart.MultipartException;
 
 import java.util.HashMap;
 import java.util.List;
@@ -67,5 +69,22 @@ public class GlobalExceptionHandler {
         log.error("Inside GlobalExceptionHandler - handleAlreadyExistsException()");
         ErrorResponse error = new ErrorResponse(HttpStatus.CONFLICT.value() , ex.getMessage());
         return new  ResponseEntity<>(error,HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler(ImageUploadException.class)
+    public ResponseEntity<ErrorResponse> handleImageUploadException(ImageUploadException ex) {
+        log.error("Image upload failed", ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler({MultipartException.class, MaxUploadSizeExceededException.class})
+    public ResponseEntity<ErrorResponse> handleMultipartException(Exception ex) {
+        log.error("Multipart error", ex);
+        String msg = ex instanceof MaxUploadSizeExceededException
+                ? "Uploaded file exceeds maximum allowed size"
+                : "Invalid multipart request";
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), msg);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 }
