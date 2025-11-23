@@ -2,6 +2,7 @@ package cloud.devyard.rbapi.service.impl;
 
 import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.dto.AuthResponse;
+import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
 import cloud.devyard.rbapi.exception.AlreadyExistsException;
 import cloud.devyard.rbapi.exception.NotFoundException;
@@ -12,6 +13,7 @@ import cloud.devyard.rbapi.service.EmailService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private  final AuthResponseMapper authResponseMapper;
     private final EmailService emailService;
+    private final PasswordEncoder passwordEncoder;
 
     public AuthResponse register(RegisterRequest request){
         log.info("Inside AuthService: register() {} ",request);
@@ -58,6 +61,29 @@ public class AuthServiceImpl implements AuthService {
         user.setVerificationExpires(null);
         user.setVerificationToken(null);
         userRepository.save(user);
+    }
+
+    @Override
+    public AuthResponse login(LoginRequest request) {
+
+        User existingUser = userRepository.findByEmail(request.getEmail())
+                .orElseThrow(()->{
+                            log.error("Inside AuthServiceImpl - login() : user not found {} " , request.getEmail());
+                            throw new NotFoundException("Invalid Email or Password");
+                        }
+                );
+
+        if (!passwordEncoder.matches(request.getPassword() , existingUser.getPassword()))
+        {
+            throw new NotFoundException("Invalid Email or Password");
+        }
+
+        String jwtToken = "";
+
+        log.info("User login {}" , request.getEmail());
+        AuthResponse response =  authResponseMapper.userToAuthResponse(existingUser);
+        response.setToken(jwtToken);
+        return response;
     }
 
     private void verificationEmail(User user) {

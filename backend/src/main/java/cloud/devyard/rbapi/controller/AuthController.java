@@ -1,6 +1,7 @@
 package cloud.devyard.rbapi.controller;
 
 import cloud.devyard.rbapi.dto.AuthResponse;
+import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.FileUploadService;
@@ -42,6 +43,12 @@ public class AuthController {
         log.info("Inside AuthCOntroller - imageUpload()");
         Map<String, String> result = fileUploadService.uploadSingleImage(file);
         return ResponseEntity.ok(result);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
+        AuthResponse response = authService.login(request);
+        return ResponseEntity.ok(response);
     }
 
 }
