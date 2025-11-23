@@ -5,6 +5,7 @@ import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
 import cloud.devyard.rbapi.exception.AlreadyExistsException;
+import cloud.devyard.rbapi.exception.EmailNotVerifyException;
 import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.mapper.AuthResponseMapper;
 import cloud.devyard.rbapi.repository.UserRepository;
@@ -78,7 +79,11 @@ public class AuthServiceImpl implements AuthService {
             throw new NotFoundException("Invalid Email or Password");
         }
 
-        String jwtToken = "";
+        if (!existingUser.isEmailVerify()){
+            throw new EmailNotVerifyException("Email is not verify, Verify Your email.");
+        }
+
+        String jwtToken = "token";
 
         log.info("User login {}" , request.getEmail());
         AuthResponse response =  authResponseMapper.userToAuthResponse(existingUser);

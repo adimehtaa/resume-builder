@@ -87,4 +87,11 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value(), msg);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(EmailNotVerifyException.class)
+    public ResponseEntity<ErrorResponse> handleEmailNotVerifyException(EmailNotVerifyException ex){
+        log.error("Email is not verify: ", ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+        return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
+    }
 }
