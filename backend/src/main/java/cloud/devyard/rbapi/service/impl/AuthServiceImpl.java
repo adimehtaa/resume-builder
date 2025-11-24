@@ -11,6 +11,7 @@ import cloud.devyard.rbapi.mapper.AuthResponseMapper;
 import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.EmailService;
+import cloud.devyard.rbapi.utils.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,6 +33,7 @@ public class AuthServiceImpl implements AuthService {
     private  final AuthResponseMapper authResponseMapper;
     private final EmailService emailService;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
     public AuthResponse register(RegisterRequest request){
         log.info("Inside AuthService: register() {} ",request);
@@ -83,7 +85,7 @@ public class AuthServiceImpl implements AuthService {
             throw new EmailNotVerifyException("Email is not verify, Verify Your email.");
         }
 
-        String jwtToken = "token";
+        String jwtToken = jwtUtil.generateToken(existingUser.getId());
 
         log.info("User login {}" , request.getEmail());
         AuthResponse response =  authResponseMapper.userToAuthResponse(existingUser);

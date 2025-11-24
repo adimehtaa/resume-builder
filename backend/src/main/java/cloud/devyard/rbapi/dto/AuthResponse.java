@@ -18,7 +18,6 @@ public class AuthResponse {
     private String profileImageUrl;
     private String subscriptionPlan;
     private boolean isEmailVerify = false;
-    private String verificationToken;
     private String token;
 
     private LocalDateTime createdAt;

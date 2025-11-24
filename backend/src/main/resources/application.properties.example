@@ -17,3 +17,7 @@ spring.mail.properties.mail.smtp.from=bebrevo@gmail.com
 cloudinary.cloud-name=
 cloudinary.api-key=
 cloudinary.api.secret=
+
+#Jwt Configuration
+jwt.secret=This-IS-SECRET_KEY
+jwt.expiration=604800000
