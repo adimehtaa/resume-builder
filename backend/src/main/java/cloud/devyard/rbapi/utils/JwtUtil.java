@@ -1,5 +1,7 @@
 package cloud.devyard.rbapi.utils;
 
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,4 +36,38 @@ public class JwtUtil {
     private Key getSignKey() {
         return Keys.hmacShaKeyFor(jwtSecret.getBytes());
     }
+
+    public String getUserIdFromToken(String token) {
+
+        Claims claims = Jwts.parserBuilder()
+                .setSigningKey(getSignKey())
+                .build()
+                .parseClaimsJws(token)
+                .getBody();
+
+        return claims.getSubject();
+    }
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parserBuilder().setSigningKey(getSignKey()).build()
+                    .parseClaimsJws(token);
+            return  true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
+    }
+
+    public boolean iSTokenExpired(String token)
+    {
+        try {
+            Claims claims = Jwts.parserBuilder().setSigningKey(getSignKey()).build()
+                    .parseClaimsJws(token).getBody();
+
+            return claims.getExpiration().before(new Date());
+        } catch (JwtException | IllegalArgumentException e){
+            return false;
+        }
+    }
+
 }
