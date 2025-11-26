@@ -9,4 +9,5 @@ public interface AuthService {
     public AuthResponse register(RegisterRequest request);
     public void verifyEmail(String token);
     public AuthResponse login(LoginRequest request);
+    public String resendVerification(String email);
 }

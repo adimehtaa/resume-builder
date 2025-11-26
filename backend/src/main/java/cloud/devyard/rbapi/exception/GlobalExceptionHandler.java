@@ -94,4 +94,18 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
         return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(EmailAlreadyVerifyException.class)
+    public ResponseEntity<ErrorResponse> handleEmailAlreadyVerifyException(EmailAlreadyVerifyException ex){
+        log.error("Error: ", ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+        return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(RequiredValueException.class)
+    public ResponseEntity<ErrorResponse> handleRequiredValueException(RequiredValueException ex){
+        log.error("Error: Missing fields ", ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+        return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
+    }
 }

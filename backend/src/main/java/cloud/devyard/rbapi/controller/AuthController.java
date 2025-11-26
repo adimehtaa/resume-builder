@@ -3,6 +3,7 @@ package cloud.devyard.rbapi.controller;
 import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
+import cloud.devyard.rbapi.exception.RequiredValueException;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.FileUploadService;
 import jakarta.validation.Valid;
@@ -12,8 +13,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Map;
+import java.util.Objects;
 
 @Slf4j
 @RestController
@@ -49,6 +52,19 @@ public class AuthController {
     public ResponseEntity<AuthResponse> login(@Valid @RequestBody LoginRequest request){
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/verify-email")
+    public ResponseEntity<Map<String , String>> resendVerification(@RequestBody Map<String , String> body){
+        String email = body.get("email").trim();
+
+        if (email.isBlank() || email.isEmpty())
+        {
+            throw new RequiredValueException("Email is required value is missing.");
+        }
+
+        String message = authService.resendVerification(email);
+        return ResponseEntity.ok(Map.of("message" , message ));
     }
 
     @GetMapping("/checkAuthToken")

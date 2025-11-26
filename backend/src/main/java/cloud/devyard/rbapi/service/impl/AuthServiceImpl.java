@@ -5,6 +5,7 @@ import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
 import cloud.devyard.rbapi.exception.AlreadyExistsException;
+import cloud.devyard.rbapi.exception.EmailAlreadyVerifyException;
 import cloud.devyard.rbapi.exception.EmailNotVerifyException;
 import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.mapper.AuthResponseMapper;
@@ -19,6 +20,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 
 @Service
@@ -91,6 +93,21 @@ public class AuthServiceImpl implements AuthService {
         AuthResponse response =  authResponseMapper.userToAuthResponse(existingUser);
         response.setToken(jwtToken);
         return response;
+    }
+
+    @Override
+    public String resendVerification(String email) {
+        User user = userRepository.findByEmail(email).orElseThrow(()-> new NotFoundException("User not found."));
+        if(user.isEmailVerify()){
+            throw new EmailAlreadyVerifyException("Email is already verified.");
+        }
+
+        user.setVerificationToken(UUID.randomUUID().toString());
+        user.setVerificationExpires(LocalDateTime.now().plusHours(24));
+        userRepository.save(user);
+
+        verificationEmail(user);
+        return "Verification code send to your mail.";
     }
 
     private void verificationEmail(User user) {
