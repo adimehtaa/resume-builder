@@ -1,5 +1,6 @@
 package cloud.devyard.rbapi.security;
 
+import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.utils.JwtUtil;
@@ -48,11 +49,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             try {
                 if (jwtUtil.validateToken(token) && !jwtUtil.iSTokenExpired(token))
                 {
-                    userRepository.findByEmail(userId).orElseThrow(()->{
+                    User user = userRepository.findById(userId).orElseThrow(()->{
                         return new NotFoundException("User not found");
                     });
 
-                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userId , null , new ArrayList<>());
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(user , null , new ArrayList<>());
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
