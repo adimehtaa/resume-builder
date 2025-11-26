@@ -1,5 +1,6 @@
 package cloud.devyard.rbapi.config;
 
+import cloud.devyard.rbapi.security.JwtAuthenticationEntryPoint;
 import cloud.devyard.rbapi.security.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -29,7 +30,8 @@ public class SecurityConfig {
                         auth.requestMatchers("/api/auth/register" , "/api/auth/login" , "/api/auth/verify-email","/api/auth/upload-image" , "/actuator/health")
                                 .permitAll().anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(ex -> ex.authenticationEntryPoint(new JwtAuthenticationEntryPoint()));
 
         return http.build();
     }

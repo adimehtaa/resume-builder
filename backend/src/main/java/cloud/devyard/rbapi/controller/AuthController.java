@@ -51,4 +51,9 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
+    @GetMapping("/checkAuthToken")
+    public ResponseEntity<String> checkAuthToken(){
+        return ResponseEntity.ok("token validation is working");
+    }
+
 }
