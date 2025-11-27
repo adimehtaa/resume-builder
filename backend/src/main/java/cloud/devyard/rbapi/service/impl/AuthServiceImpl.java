@@ -110,6 +110,12 @@ public class AuthServiceImpl implements AuthService {
         return "Verification code send to your mail.";
     }
 
+    @Override
+    public AuthResponse getProfile(Object principalObject) {
+        User user = (User) principalObject;
+        return authResponseMapper.userToAuthResponse(user);
+    }
+
     private void verificationEmail(User user) {
         log.info("Inside authService: verificationEmail() : {}",user);
         try {

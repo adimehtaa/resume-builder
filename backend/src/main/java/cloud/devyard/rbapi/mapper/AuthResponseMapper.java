@@ -4,6 +4,7 @@ package cloud.devyard.rbapi.mapper;
 import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.RegisterRequest;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;

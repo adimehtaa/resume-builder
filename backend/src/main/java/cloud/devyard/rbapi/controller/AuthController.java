@@ -4,13 +4,16 @@ import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.LoginRequest;
 import cloud.devyard.rbapi.dto.RegisterRequest;
 import cloud.devyard.rbapi.exception.RequiredValueException;
+import cloud.devyard.rbapi.mapper.AuthResponseMapper;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.FileUploadService;
 import jakarta.validation.Valid;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -65,6 +68,14 @@ public class AuthController {
 
         String message = authService.resendVerification(email);
         return ResponseEntity.ok(Map.of("message" , message ));
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<AuthResponse> getProfile(Authentication authentication)
+    {
+        Object principalObject = authentication.getPrincipal();
+        AuthResponse user = authService.getProfile(principalObject);
+        return ResponseEntity.ok(user);
     }
 
     @GetMapping("/checkAuthToken")
