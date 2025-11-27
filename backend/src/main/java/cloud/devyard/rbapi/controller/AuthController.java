@@ -54,7 +54,7 @@ public class AuthController {
         return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/verify-email")
+    @PostMapping("/resend-email")
     public ResponseEntity<Map<String , String>> resendVerification(@RequestBody Map<String , String> body){
         String email = body.get("email").trim();
 
