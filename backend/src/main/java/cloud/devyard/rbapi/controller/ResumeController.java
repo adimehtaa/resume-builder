@@ -13,6 +13,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -21,7 +23,7 @@ public class ResumeController {
 
     private final ResumeService resumeService;
 
-    @PostMapping
+    @PostMapping("/create")
     public ResponseEntity<Resume> createResume(@Valid @RequestBody CreateResumeRequestDto request,
                                           Authentication authentication){
         Resume resume = resumeService.createResume(request , authentication);
@@ -29,13 +31,15 @@ public class ResumeController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getUserResumes(){
-        return ResponseEntity.ok("");
+    public ResponseEntity<List<Resume>> getUserResumes(Authentication authentication){
+        List<Resume> resumes = resumeService.getUserResumes(authentication);
+        return ResponseEntity.ok(resumes);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getResumeById(@PathVariable String id){
-        return ResponseEntity.ok("");
+    public ResponseEntity<Resume> getResumeById(@PathVariable String id , Authentication authentication){
+        Resume resume = resumeService.getResumeById(id , authentication);
+        return ResponseEntity.ok(resume);
     }
 
     @PutMapping("/{id}")

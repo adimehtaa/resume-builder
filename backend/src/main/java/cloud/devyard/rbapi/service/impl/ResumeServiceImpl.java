@@ -3,7 +3,10 @@ package cloud.devyard.rbapi.service.impl;
 import cloud.devyard.rbapi.document.Resume;
 import cloud.devyard.rbapi.dto.AuthResponse;
 import cloud.devyard.rbapi.dto.CreateResumeRequestDto;
+import cloud.devyard.rbapi.exception.AccessDeniedException;
+import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.repository.ResumeRepository;
+import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Slf4j
@@ -32,6 +36,26 @@ public class ResumeServiceImpl implements ResumeService {
         setDefaultResumeData(newResume);
 
         return resumeRepository.save(newResume);
+    }
+
+    @Override
+    public List<Resume> getUserResumes(Authentication authentication) {
+        AuthResponse authResponse = authService.getProfile(authentication.getPrincipal());
+        List<Resume> resumes = resumeRepository.findByUserIdOrderByUpdatedAtDesc(authResponse.getId());
+        return resumes;
+    }
+
+    @Override
+    public Resume getResumeById(String resumeId, Authentication authentication) {
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new NotFoundException("Resume Not found."));
+
+        AuthResponse response = authService.getProfile(authentication.getPrincipal());
+        if(!response.getId().equals(resume.getUserId()))
+        {
+            throw new AccessDeniedException("You are not allowed to access this resume.");
+        }
+        return resume;
     }
 
     private void setDefaultResumeData(Resume resume){

@@ -4,6 +4,11 @@ import cloud.devyard.rbapi.document.Resume;
 import cloud.devyard.rbapi.dto.CreateResumeRequestDto;
 import org.springframework.security.core.Authentication;
 
+import java.util.List;
+import java.util.Optional;
+
 public interface ResumeService {
     public Resume createResume(CreateResumeRequestDto request , Authentication authentication);
+    public List<Resume> getUserResumes(Authentication authentication);
+    public Resume getResumeById(String resumeId , Authentication authentication);
 }

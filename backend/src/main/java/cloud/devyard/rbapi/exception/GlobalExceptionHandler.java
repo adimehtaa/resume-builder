@@ -108,4 +108,11 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
         return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponse> handleAccessDeniedException(AccessDeniedException ex){
+        log.error("Error: Access Deny exception.", ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
+        return new ResponseEntity<>(error , HttpStatus.UNAUTHORIZED);
+    }
 }
