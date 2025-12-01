@@ -43,8 +43,9 @@ public class ResumeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateResume(@PathVariable String id , @RequestBody Resume updatedData){
-        return ResponseEntity.ok("");
+    public ResponseEntity<Resume> updateResume(@PathVariable String id , @RequestBody Resume updatedData , Authentication authentication){
+        Resume updatedResume = resumeService.updateResume(id , updatedData , authentication);
+        return ResponseEntity.ok(updatedResume);
     }
 
     @PutMapping("/{id}/upload-images")

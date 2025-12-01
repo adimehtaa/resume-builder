@@ -6,7 +6,6 @@ import cloud.devyard.rbapi.dto.CreateResumeRequestDto;
 import cloud.devyard.rbapi.exception.AccessDeniedException;
 import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.repository.ResumeRepository;
-import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.ResumeService;
 import lombok.RequiredArgsConstructor;
@@ -56,6 +55,11 @@ public class ResumeServiceImpl implements ResumeService {
             throw new AccessDeniedException("You are not allowed to access this resume.");
         }
         return resume;
+    }
+
+    @Override
+    public Resume updateResume(String id, Resume updatedData, Authentication authentication) {
+        return null;
     }
 
     private void setDefaultResumeData(Resume resume){
