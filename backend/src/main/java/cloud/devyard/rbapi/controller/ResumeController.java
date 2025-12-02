@@ -2,6 +2,7 @@ package cloud.devyard.rbapi.controller;
 
 import cloud.devyard.rbapi.document.Resume;
 import cloud.devyard.rbapi.dto.CreateResumeRequestDto;
+import cloud.devyard.rbapi.service.FileUploadService;
 import cloud.devyard.rbapi.service.ResumeService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -22,6 +24,7 @@ import java.util.List;
 public class ResumeController {
 
     private final ResumeService resumeService;
+    private final FileUploadService fileUploadService;
 
     @PostMapping("/create")
     public ResponseEntity<Resume> createResume(@Valid @RequestBody CreateResumeRequestDto request,
@@ -49,10 +52,12 @@ public class ResumeController {
     }
 
     @PutMapping("/{id}/upload-images")
-    public ResponseEntity<?> uploadResumeImages(@PathVariable String id , @RequestPart(value = "thumbnail" , required = true)MultipartFile thumbnail ,
+    public ResponseEntity<Map<String , String>> uploadResumeImages(@PathVariable String id , @RequestPart(value = "thumbnail" , required = false)MultipartFile thumbnail ,
                                                 @RequestPart(value = "profileImage" , required = false) MultipartFile profileImage,
-                                                HttpServletRequest request){
-        return ResponseEntity.ok("");
+                                                HttpServletRequest request,
+                                                Authentication authentication){
+        Map<String , String> response = fileUploadService.uploadResumeImages(id , authentication , thumbnail , profileImage);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
