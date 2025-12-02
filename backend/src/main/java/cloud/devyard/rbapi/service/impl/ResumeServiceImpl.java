@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,7 @@ public class ResumeServiceImpl implements ResumeService {
     private final ResumeRepository resumeRepository;
     private final AuthService authService;
 
+    @Transactional
     @Override
     public Resume createResume(CreateResumeRequestDto request , Authentication authentication) {
         Resume newResume = new Resume();
@@ -57,9 +59,32 @@ public class ResumeServiceImpl implements ResumeService {
         return resume;
     }
 
+    @Transactional
     @Override
-    public Resume updateResume(String id, Resume updatedData, Authentication authentication) {
-        return null;
+    public Resume updateResume(String resumeId, Resume updatedData, Authentication authentication) {
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new NotFoundException("Resume Not found."));
+
+        AuthResponse response = authService.getProfile(authentication.getPrincipal());
+        if(!response.getId().equals(resume.getUserId()))
+        {
+            throw new AccessDeniedException("You are not allowed to access this resume.");
+        }
+
+        resume.setTitle(updatedData.getTitle());
+        resume.setThumbnailLink(updatedData.getThumbnailLink());
+        resume.setTemplate(updatedData.getTemplate());
+        resume.setProfileInfo(updatedData.getProfileInfo());
+        resume.setContactInfo(updatedData.getContactInfo());
+        resume.setWorkExperience(updatedData.getWorkExperience());
+        resume.setEducation(updatedData.getEducation());
+        resume.setSkill(updatedData.getSkill());
+        resume.setProject(updatedData.getProject());
+        resume.setCertification(updatedData.getCertification());
+        resume.setLanguage(updatedData.getLanguage());
+        resume.setInterests(updatedData.getInterests());
+
+        return resumeRepository.save(resume);
     }
 
     private void setDefaultResumeData(Resume resume){

@@ -67,7 +67,7 @@ public class Resume {
         private String profilePreviewUrl;
         private String fullName;
         private String designation;
-        private String summery;
+        private String summary;
     }
 
     @Data
