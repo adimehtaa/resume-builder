@@ -21,3 +21,7 @@ cloudinary.api.secret=
 #Jwt Configuration
 jwt.secret=This-IS-SECRET_KEY
 jwt.expiration=604800000
+
+#Razorpay Configuration
+razorpay.key.id=
+razorpay.key.secret=
