@@ -87,6 +87,19 @@ public class ResumeServiceImpl implements ResumeService {
         return resumeRepository.save(resume);
     }
 
+    @Override
+    public void deleteResume(String resumeId, Authentication authentication) {
+        Resume resume = resumeRepository.findById(resumeId)
+                .orElseThrow(() -> new NotFoundException("Resume Not found."));
+
+        AuthResponse response = authService.getProfile(authentication.getPrincipal());
+        if(!response.getId().equals(resume.getUserId()))
+        {
+            throw new AccessDeniedException("You are not allowed to access this resume.");
+        }
+        resumeRepository.delete(resume);
+    }
+
     private void setDefaultResumeData(Resume resume){
         resume.setProfileInfo(new Resume.ProfileInfo());
         resume.setContactInfo(new Resume.ContactInfo());

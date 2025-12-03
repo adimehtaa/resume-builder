@@ -12,4 +12,5 @@ public interface ResumeService {
     public List<Resume> getUserResumes(Authentication authentication);
     public Resume getResumeById(String resumeId , Authentication authentication);
     Resume updateResume(String id, Resume updatedData, Authentication authentication);
+    void deleteResume(String resumeId, Authentication authentication);
 }
