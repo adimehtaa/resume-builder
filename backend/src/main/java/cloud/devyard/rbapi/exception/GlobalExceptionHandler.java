@@ -99,14 +99,14 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponse> handleEmailAlreadyVerifyException(EmailAlreadyVerifyException ex){
         log.error("Error: ", ex);
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
-        return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(RequiredValueException.class)
     public ResponseEntity<ErrorResponse> handleRequiredValueException(RequiredValueException ex){
         log.error("Error: Missing fields ", ex);
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
-        return  new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AccessDeniedException.class)
@@ -114,5 +114,12 @@ public class GlobalExceptionHandler {
         log.error("Error: Access Deny exception.", ex);
         ErrorResponse error = new ErrorResponse(HttpStatus.UNAUTHORIZED.value(), ex.getMessage());
         return new ResponseEntity<>(error , HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(PlanTypeException.class)
+    public ResponseEntity<ErrorResponse> handlePlanTypeException(PlanTypeException ex){
+        log.error("Error: Invalid plan types." , ex);
+        ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
+        return new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
 }
