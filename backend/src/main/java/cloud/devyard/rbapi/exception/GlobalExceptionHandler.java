@@ -122,4 +122,18 @@ public class GlobalExceptionHandler {
         ErrorResponse error = new ErrorResponse(HttpStatus.BAD_REQUEST.value() , ex.getMessage());
         return new ResponseEntity<>(error , HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(PaymentCreationException.class)
+    public ResponseEntity<ErrorResponse> handlePaymentCreationException(
+            PaymentCreationException ex) {
+
+        log.error("Error while creating payment order", ex);
+
+        ErrorResponse error = new ErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                "Payment service is temporarily unavailable. Please try again."
+        );
+
+        return new ResponseEntity<>(error, HttpStatus.SERVICE_UNAVAILABLE);
+    }
 }
