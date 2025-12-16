@@ -9,6 +9,7 @@ import cloud.devyard.rbapi.service.PaymentService;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
+import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -60,5 +61,45 @@ public class PaymentServiceImpl implements PaymentService {
         } catch (RazorpayException e) {
             throw new PaymentCreationException("Failed to create Razorpay order", e);
         }
+    }
+
+    @Override
+    public Boolean verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature) {
+
+        JSONObject attributes = new JSONObject();
+
+        attributes.put("razorpay_order_id" , razorpayOrderId);
+        attributes.put("razorpay_payment_id" , razorpayPaymentId);
+        attributes.put("razorpay_signature" , razorpaySignature);
+
+        try{
+
+            boolean isValid = Utils.verifyPaymentSignature(attributes, razorpaySecret);
+
+            if(isValid){
+
+                //update payment status
+                Payment payment = paymentRepository.findByRazorpayOrderId(razorpayOrderId)
+                        .orElseThrow(() -> new RuntimeException("Payment not found."));
+
+                payment.setRazorpayPaymentId(razorpayPaymentId);
+                payment.setRazorpaySignature(razorpaySignature);
+                payment.setStatus("paid");
+                paymentRepository.save(payment);
+
+                //update userSubscription
+                upgradeUserSubscription(payment.getUserId() , payment.getPlanType());
+                return true;
+            }
+
+            return false;
+
+        }catch (RazorpayException e){
+            log.error("Razorpay verification failed", e);
+            return false;
+        }
+    }
+
+    private void upgradeUserSubscription(String userId, String planType) {
     }
 }

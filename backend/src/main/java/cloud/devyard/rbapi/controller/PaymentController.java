@@ -1,6 +1,7 @@
 package cloud.devyard.rbapi.controller;
 
 import cloud.devyard.rbapi.document.Payment;
+import cloud.devyard.rbapi.exception.BadRequestException;
 import cloud.devyard.rbapi.exception.PlanTypeException;
 import cloud.devyard.rbapi.service.PaymentService;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +39,23 @@ public class PaymentController {
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<?> verifyPayment(@RequestBody Map<String , String> request){
+    public ResponseEntity<Map<String , String>> verifyPayment(@RequestBody Map<String , String> request){
 
-        return null;
+        String razorpayOrderId= request.get("razorpay_order_id");
+        String razorpayPaymentId = request.get("razorpay_payment_id");
+        String razorpaySignature = request.get("razorpay_signature");
+
+        if (Objects.isNull(razorpayOrderId)
+                || Objects.isNull(razorpayPaymentId)
+                || Objects.isNull(razorpaySignature)) {
+            throw new BadRequestException("Missing Razorpay parameters");
+        }
+
+        Boolean isValid =  paymentService.verifyPayment(razorpayOrderId , razorpayPaymentId , razorpaySignature);
+        if(isValid){
+            return ResponseEntity.ok(Map.of("message","Payment verified successfully.", "status" , "success"));
+        }
+        return ResponseEntity.ok(Map.of("message","Payment verified failed.", "status" , "failed"));
     }
 
     @GetMapping("/history")
