@@ -108,6 +108,13 @@ public class PaymentServiceImpl implements PaymentService {
         return paymentRepository.findByUserIdOrderByCreatedAtDesc(response.getId());
     }
 
+    @Override
+    public Payment getOrderDetails(String orderId) {
+       return paymentRepository.findByRazorpayOrderId(orderId).orElseThrow(
+                ()-> new NotFoundException("Order id not found.")
+        );
+    }
+
     private void upgradeUserSubscription(String userId, String planType) {
         User existingUser = userRepository.findById(userId).orElseThrow(
                 ()-> new NotFoundException("Username not found "+userId)

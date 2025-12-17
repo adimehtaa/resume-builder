@@ -11,4 +11,6 @@ public interface PaymentService {
     Boolean verifyPayment(String razorpayOrderId, String razorpayPaymentId, String razorpaySignature);
 
     List<Payment> getUserPaymentHistory(Authentication authentication);
+
+    Payment getOrderDetails(String orderId);
 }
