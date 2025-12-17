@@ -20,6 +20,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -99,6 +100,12 @@ public class PaymentServiceImpl implements PaymentService {
             log.error("Razorpay verification failed", e);
             return false;
         }
+    }
+
+    @Override
+    public List<Payment> getUserPaymentHistory(Authentication authentication) {
+        AuthResponse response = authService.getProfile(authentication.getPrincipal());
+        return paymentRepository.findByUserIdOrderByCreatedAtDesc(response.getId());
     }
 
     private void upgradeUserSubscription(String userId, String planType) {
