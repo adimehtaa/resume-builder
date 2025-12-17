@@ -1,9 +1,12 @@
 package cloud.devyard.rbapi.service.impl;
 
 import cloud.devyard.rbapi.document.Payment;
+import cloud.devyard.rbapi.document.User;
 import cloud.devyard.rbapi.dto.AuthResponse;
+import cloud.devyard.rbapi.exception.NotFoundException;
 import cloud.devyard.rbapi.exception.PaymentCreationException;
 import cloud.devyard.rbapi.repository.PaymentRepository;
+import cloud.devyard.rbapi.repository.UserRepository;
 import cloud.devyard.rbapi.service.AuthService;
 import cloud.devyard.rbapi.service.PaymentService;
 import com.razorpay.Order;
@@ -26,6 +29,7 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final AuthService  authService;
     private final PaymentRepository paymentRepository;
+    private final UserRepository userRepository;
 
     @Value("${razorpay.key.id}")
     private String razorpayKeyId;
@@ -73,11 +77,8 @@ public class PaymentServiceImpl implements PaymentService {
         attributes.put("razorpay_signature" , razorpaySignature);
 
         try{
-
             boolean isValid = Utils.verifyPaymentSignature(attributes, razorpaySecret);
-
             if(isValid){
-
                 //update payment status
                 Payment payment = paymentRepository.findByRazorpayOrderId(razorpayOrderId)
                         .orElseThrow(() -> new RuntimeException("Payment not found."));
@@ -101,5 +102,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     private void upgradeUserSubscription(String userId, String planType) {
+        User existingUser = userRepository.findById(userId).orElseThrow(
+                ()-> new NotFoundException("Username not found "+userId)
+        );
+        existingUser.setSubscriptionPlan(planType);
+        userRepository.save(existingUser);
+        log.info("User {} upgraded to plan {}" , userId , planType);
     }
 }
