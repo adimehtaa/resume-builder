@@ -32,4 +32,9 @@ public class EmailServiceImpl implements EmailService {
         mailSender.send(message);
 
     }
+
+    @Override
+    public void sendEmailWithAttachment(String to, String subject, String body, byte[] attachement, String filename) {
+
+    }
 }
