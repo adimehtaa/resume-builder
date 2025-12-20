@@ -9,7 +9,7 @@ import Footer from './components/Footer.vue';
 </script>
 
 <template>
-  <Navbar logo_text="Resume Builder" button_text="Get Started Free" />
+  <Navbar logo_text="ResumeCraft" button_text="Get Started Free" />
   <Hero />
   <Features />
   <Price />

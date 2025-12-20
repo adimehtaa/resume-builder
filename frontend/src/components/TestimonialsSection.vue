@@ -38,12 +38,20 @@ const testimonials = [
 
     <!-- Cards Row -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <TestimonialCard
-        v-for="(t, i) in testimonials"
-        :key="i"
-        v-bind="t"
-      />
+      <TestimonialCard v-for="(t, i) in testimonials" :key="i" v-bind="t" />
     </div>
 
   </section>
+
+  <!-- CTA Footer aligned same as content -->
+  <div class="bg-indigo-500">
+    <div class="max-w-6xl mx-auto h-48 flex flex-col items-center justify-center text-white text-center px-6">
+      <h1 class="text-3xl font-bold mb-1">
+        Ready to Build Your Future?
+      </h1>
+      <p class="opacity-90">
+        Join thousands of professionals who've landed their dream jobs
+      </p>
+    </div>
+  </div>
 </template>
