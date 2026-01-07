@@ -8,7 +8,7 @@ const props = defineProps<{
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
-    const navbarHeight = 64 // h-16 = 64px
+    const navbarHeight = 64
     const elementPosition = element.getBoundingClientRect().top + window.scrollY
     const targetPosition = elementPosition - navbarHeight
 
@@ -19,7 +19,6 @@ const scrollToSection = (id: string) => {
   }
 }
 
-// Alternative method using native scrollIntoView
 const scrollToSectionAlt = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
@@ -27,7 +26,6 @@ const scrollToSectionAlt = (id: string) => {
       behavior: 'smooth',
       block: 'start'
     })
-    // Adjust for fixed navbar after scroll
     setTimeout(() => {
       window.scrollBy(0, -64)
     }, 500)
