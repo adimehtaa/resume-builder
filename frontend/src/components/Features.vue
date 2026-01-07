@@ -33,27 +33,26 @@ const featureData = [
     desc: "Your data is safely stored and never shared without your permission."
   }
 ]
-
-
 </script>
 
 <template>
-  <div class="mt-18 mb-18 flex flex-col items-center text-center px-4">
+  <section class="w-full bg-white py-20">
+    <div class="max-w-7xl mx-auto flex flex-col items-center text-center px-6 md:px-10">
 
-    <h1 class="text-3xl font-extrabold leading-tight">
-      Everything You Need to <span class="text-blue-600">Succeed</span>
-    </h1>
+      <h2 class="text-4xl font-extrabold leading-tight text-slate-900">
+        Everything You Need to <span class="text-blue-600">Succeed</span>
+      </h2>
 
-    <p class="mt-2 text-gray-600 max-w-2xl">
-      Our powerful features help you create professional resumes that get noticed
-      by employers and ATS systems.
-    </p>
+      <p class="mt-4 text-gray-600 text-lg max-w-2xl">
+        Our powerful features help you create professional resumes that get noticed
+        by employers and ATS systems.
+      </p>
 
-    <div class="mt-14 flex flex-wrap gap-6 justify-center">
-      <FeatureCard v-for="(value, i) in featureData" :key="i" :icon="value.icon" :title="value.title"
-        :desc="value.desc" />
+      <div class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full">
+        <FeatureCard v-for="(value, i) in featureData" :key="i" :icon="value.icon" :title="value.title"
+          :desc="value.desc" />
+      </div>
+
     </div>
-
-  </div>
-
+  </section>
 </template>

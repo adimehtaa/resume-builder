@@ -33,23 +33,21 @@ const priceData = [
 </script>
 
 <template>
-  <section class="flex flex-col items-center text-center px-6 py-16">
+  <section class="w-full bg-gray-50 py-20">
+    <div class="max-w-7xl mx-auto flex flex-col items-center text-center px-6 md:px-10">
 
-    <h2 class="text-3xl font-extrabold">
-      Simple, Transparent Pricing
-    </h2>
+      <h2 class="text-4xl font-extrabold text-slate-900">
+        Simple, Transparent Pricing
+      </h2>
 
-    <p class="text-gray-600 mt-2 mb-10">
-      Choose the plan that works best for you
-    </p>
+      <p class="text-gray-600 text-lg mt-4 mb-12">
+        Choose the plan that works best for you
+      </p>
 
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl w-full">
-      <PriceCard
-        v-for="(plan, i) in priceData"
-        :key="i"
-        v-bind="plan"
-      />
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full max-w-4xl">
+        <PriceCard v-for="(plan, i) in priceData" :key="i" v-bind="plan" />
+      </div>
+
     </div>
-
   </section>
 </template>

@@ -10,49 +10,36 @@ const props = defineProps<{
 </script>
 
 <template>
-  <div
-    class="rounded-2xl border shadow-sm p-6 max-w-[360px] w-full mx-auto transition hover:-translate-y-1"
+  <div class="rounded-2xl border shadow-sm p-8 w-full transition-all duration-200 hover:-translate-y-1 hover:shadow-lg"
     :class="highlight
-      ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white border-transparent'
-      : 'bg-white border-gray-200'"
-  >
+      ? 'bg-gradient-to-br from-indigo-500 to-purple-500 text-white border-transparent shadow-xl'
+      : 'bg-white border-gray-200'">
 
     <!-- Header -->
-    <div class="flex justify-between items-center">
-      <h2 class="text-xl font-bold">
+    <div class="flex justify-between items-center mb-4">
+      <h3 class="text-2xl font-bold">
         {{ name }}
-      </h2>
+      </h3>
 
-      <span
-        v-if="highlight"
-        class="bg-amber-300 text-black text-xs font-semibold px-3 py-1 rounded-full"
-      >
+      <span v-if="highlight" class="bg-amber-300 text-black text-xs font-semibold px-3 py-1 rounded-full">
         Popular
       </span>
     </div>
 
-    <h3 class="text-3xl font-extrabold mt-2">
-      {{ price }}
-    </h3>
+    <div class="mb-2">
+      <span class="text-4xl font-extrabold">{{ price }}</span>
+      <span class="text-sm" :class="highlight ? 'text-white/80' : 'text-gray-500'">/month</span>
+    </div>
 
-    <p
-      class="mt-1 text-sm"
-      :class="highlight ? 'text-white/80' : 'text-gray-500'"
-    >
+    <p class="text-sm mb-6" :class="highlight ? 'text-white/80' : 'text-gray-500'">
       {{ intro }}
     </p>
 
     <!-- Features -->
-    <ul class="mt-4 space-y-2">
-      <li
-        v-for="(f, i) in features"
-        :key="i"
-        class="flex items-center gap-2"
-      >
-        <span
-          class="text-green-500 font-bold text-lg leading-none"
-          :class="highlight && 'text-white'"
-        >✓</span>
+    <ul class="space-y-3 mb-8">
+      <li v-for="(f, i) in features" :key="i" class="flex items-center gap-3">
+        <span class="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center font-bold text-sm"
+          :class="highlight ? 'bg-white/20 text-white' : 'bg-green-100 text-green-600'">✓</span>
 
         <span class="text-sm">
           {{ f }}
@@ -61,12 +48,9 @@ const props = defineProps<{
     </ul>
 
     <!-- Button -->
-    <button
-      class="w-full mt-6 font-medium py-2.5 rounded-xl transition text-sm"
-      :class="highlight
-        ? 'bg-white text-black hover:bg-gray-100'
-        : 'bg-gray-100 hover:bg-gray-200 text-black'"
-    >
+    <button class="w-full font-semibold py-3 rounded-xl transition-all duration-200" :class="highlight
+      ? 'bg-white text-indigo-600 hover:bg-gray-100 shadow-md hover:shadow-lg'
+      : 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-md hover:shadow-lg'">
       {{ button }}
     </button>
 

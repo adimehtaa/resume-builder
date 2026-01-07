@@ -5,15 +5,14 @@ import Features from './components/Features.vue';
 import Price from './components/Price.vue';
 import TestimonialsSection from "./components/TestimonialsSection.vue"
 import Footer from './components/Footer.vue';
-
 </script>
 
 <template>
   <Navbar logo_text="ResumeCraft" button_text="Get Started Free" />
-  <Hero />
-  <Features />
-  <Price />
-  <TestimonialsSection />
+  <Hero id="home" />
+  <Features id="features" />
+  <Price id="pricing" />
+  <TestimonialsSection id="testimonials" />
   <Footer />
 </template>
 
