@@ -8,7 +8,7 @@ const props = defineProps<{
 const scrollToSection = (id: string) => {
   const element = document.getElementById(id)
   if (element) {
-    const navbarHeight = 64
+    const navbarHeight = 64 // h-16 = 64px
     const elementPosition = element.getBoundingClientRect().top + window.scrollY
     const targetPosition = elementPosition - navbarHeight
 
@@ -60,7 +60,7 @@ const scrollToSectionAlt = (id: string) => {
       </div>
 
       <!-- Button -->
-      <button class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-medium
+      <button @click="$router.push('/auth')" class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-medium
                px-5 py-2.5 rounded-md shadow-sm hover:shadow-md
                transition duration-200">
         {{ button_text }}

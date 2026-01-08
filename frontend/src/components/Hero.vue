@@ -26,11 +26,11 @@
         </p>
 
         <div class="flex flex-wrap items-center gap-4 pt-2">
-          <button
+          <button @click="$router.push('/auth')"
             class="bg-amber-400 hover:bg-amber-500 text-slate-900 font-semibold px-6 py-3 rounded-lg cursor-pointer shadow-sm hover:shadow-md transition-all duration-200">
             Start Building Now
           </button>
-          <button
+          <button @click="$router.push('/auth')"
             class="bg-white hover:bg-amber-100 text-slate-800 font-medium px-6 py-3 rounded-lg cursor-pointer border border-amber-300 hover:border-amber-400 hover:shadow-sm transition-all duration-200">
             View Templates
           </button>
